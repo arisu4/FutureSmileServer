@@ -1,13 +1,22 @@
 const jwt = require('jsonwebtoken')
 
+
+
 exports.authjwt = (req,res,next)=>{
-    if(req.cookies&&req.cookies.adminToken){
-        jwt.verify(req.cookies.adminToken,'auth',(err,data)=>{
-            req.admin=data
-            next()
+   //console.log("auth token",Object.keys(req.body)[0]);
+    
+    if(Object.keys(req.body)[0]){
+        console.log('from auth');
+        jwt.verify(Object.keys(req.body)[0],process.env.secret,(err)=>{    
+            if(err){
+                res.status(403).json({flag:0,message:"Token not present"})
+            }  
+            else{
+                next()
+            }
         })
     }else{
-        next()
+        res.status(401).json({flag:-1,message:"Please Login"})
     }
 }
 

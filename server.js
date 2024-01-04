@@ -2,9 +2,9 @@ const express = require("express")
 const bodyParser= require("body-parser")
 const path = require('path')
 //const BASE_URL = process.env.PORT
-const cookieparser = require('cookie-parser')
+const cookieParser = require('cookie-parser')
 const session = require('express-session')
-const adminAuth  = require('../server/Middleware/adminAuth')
+//const adminAuth  = require('../server/Middleware/adminAuth')
 //const mysql = require('mysql')
 //const expressValidator = require('express-validator')
 //const path = require('path')
@@ -16,22 +16,23 @@ const app = express()
 
 //middleware
 app.use(cors())
- app.use( express.static(path.join(__dirname, 'Public')))
+app.use( express.static(path.join(__dirname, 'Public')))
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
-app.use(cookieparser())
+app.use(cookieParser())
 app.use(session({
-    cookie:{maxAge:10000},
-    secret:'auth',
+    cookie:{maxAge:3600},
+    secret:process.env.secret,
     resave:false,
     saveUninitialized:false
 }))
-app.use(adminAuth.authjwt)
+
+//app.use(adminAuth.authjwt)
 
 
 
 app.use(bodyParser.json())
-//app.use(bodyParser.urlencoded({extended:false}))
+app.use(bodyParser.urlencoded({extended:true}))
 
 
 const ContactRouter = require(`./Routes/ClientRoute`)

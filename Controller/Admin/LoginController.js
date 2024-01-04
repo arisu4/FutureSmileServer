@@ -2,6 +2,7 @@ const db = require('../../Model/IndexModel')
 const user = require('../../Model/User')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
+const cookie = require('cookie-parser')
 //const { Op } = require('sequelize')
 
 
@@ -87,6 +88,7 @@ const register = async (req, res) => {
 //  })
 
 const adminLogin = async (req, res) => {
+   console.log("body",req.body)
     await User.findOne({
       where: {
          email: req.body.email
@@ -97,74 +99,82 @@ const adminLogin = async (req, res) => {
       if(data && data.role=="1"){
          const hashedPassword = data.password
          if(bcrypt.compareSync(req.body.password,hashedPassword)){
-            const token = jwt.sign({
-               id:data.id,
+            const token =jwt.sign({
                email:data.email
-            },'auth',{expiresIn:'5m'})
-            res.cookie('adminToken',token)
-         
-            //console.log('token---------',token)
+            },process.env.secret,{expiresIn:'10s'})
+            //res.cookie('adminToken',token,{maxAge:3600,httpOnly:true,secure:false})
+               if(token){
+                  res.status(200).json({status: 1,message:"Logged successfully",token:token})  
+               }else{
+                  res.status(401).json({status: 0,message:"Please Login"})   
+               }
+            //console.log('token---------',token
+            //console.log('cookie',req.cookies);
 
-            const cookie = req.cookies
-            console.log('cookie',cookie);
-
-            console.log(data,"login successfully")
-            res.status(200).json({status: 1,message:"Logged successfully"})
+            //console.log(data,"login successfully")
+            //res.status(200).json({status: 1,message:"Logged successfully",token:token})
 
          } else if(data && data.role=="1") {
             res.status(400).json({status:1,message:"Bad Credentials"})
-            console.log('password problem')
+            // console.log('password problem')
        }
-       } else if(data && data.role=="0"){
+       } else if(data && data.role =="0"){
          res.status(420).json({status:1,message:"Not an admin"})
 
        }
     })
+
+
 
    // console.log('datas', datas)
    // if (datas && datas.role == "1") {
    //    const hashedPassword = datas.password
    //    if (bcrypt.compareSync(req.body.password, hashedPassword)) {
    //       const token = jwt.sign({
-   //          id: datas.id,
    //          email: datas.email
-   //       }, 'auth', { expiresIn: '5m' })
-   //       res.cookie('adminToken', token)
+   //       }, 'auth', { expiresIn: "1hr" })
+   //       //res.cookie('adminToken', token,{maxAge:3600,httpOnly:true,secure:false})
+   //       console.log('cookie---',req.cookies)
 
-   //       const cookie = req.cookies
-   //       console.log('cookie---',cookie)
-
-   //       console.log('token---------',token)
+   //       //console.log('token---------',token)
 
 
    //       console.log(datas,"login successfully")
-   //       res.status(200).json({ status: 1, message: "Logged successfully" })
+   //       res.status(200).json({ status: 1, message: "Logged successfully", token:token })
 
    //    }
    // }
 }
 
-
-const adminAuth = (req, res, next) => {
-   if (req.admin) {
-      console.log('verified admin', req.admin)
-   } else {
-      res.status(404).json({ message: "login first" })
-      res.redirect("/")
-   }
+const verifyToken =(req,res)=>{
+     //console.log('token alive');
+        res.status(200).json({
+          message:'Token Verified Successfully',
+      flag: 1
+        })
 }
 
 
+// const adminAuth = (req, res, next) => {
+//    if (req.admin) {
+//       console.log('verified admin', req.admin)
+//    } else {
+//       res.status(404).json({ message: "login first" })
+//       res.redirect("/")
+//    }
+// }
 
 
 
-const adminLogout = (res) => {
-   cookies.remove('token');
-   localStorage.clear();
-   res.render('/')
-   res.status(200).json({ message: "Logged out" })
 
-}
+
+// const adminLogout = (res) => {
+//    cookies.remove('token');
+//    localStorage.clear();
+//    res.render('/')
+//    res.status(200).json({ message: "Logged out" })
+
+// }
 
 
 
@@ -172,6 +182,7 @@ const adminLogout = (res) => {
 module.exports = {
    register,
    adminLogin,
-   adminLogout,
-   adminAuth
+   // adminLogout,
+   //adminAuth,
+   verifyToken,
 }
