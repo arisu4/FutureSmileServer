@@ -139,7 +139,7 @@ const Gallery= db.gallery
       const id = req.params.id
       let galleryexists =  await Gallery.findOne({
          where: {
-            id: id
+            id: id 
          },
          raw: true
       })

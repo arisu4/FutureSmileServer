@@ -87,42 +87,87 @@ const register = async (req, res) => {
 //    data:loginData
 //  })
 
-const adminLogin = async (req, res) => {
-   console.log("body",req.body)
-    await User.findOne({
-      where: {
-         email: req.body.email
-      },
-      raw: true
-   })
-    .then(data=>{
-      if(data && data.role=="1"){
-         const hashedPassword = data.password
-         if(bcrypt.compareSync(req.body.password,hashedPassword)){
-            const token =jwt.sign({
-               email:data.email
-            },process.env.secret,{expiresIn:'10s'})
-            //res.cookie('adminToken',token,{maxAge:3600,httpOnly:true,secure:false})
-               if(token){
-                  res.status(200).json({status: 1,message:"Logged successfully",token:token})  
-               }else{
-                  res.status(401).json({status: 0,message:"Please Login"})   
-               }
-            //console.log('token---------',token
-            //console.log('cookie',req.cookies);
+// const adminLogin = async (req, res) => {
+//    console.log("body",req.body)
+//     await User.findOne({
+//       where: {
+//          email: req.body.email
+//       },
+//       raw: true
+//    })
+//     .then(data=>{
+//       if(data && data.role=="admin"){
+//          const hashedPassword = data.password
+//          if(bcrypt.compareSync(req.body.password,hashedPassword)){
+//             const token =jwt.sign({
+//                email:data.email
+//             },process.env.secret,{expiresIn:'10s'})
+//             //res.cookie('adminToken',token,{maxAge:3600,httpOnly:true,secure:false})
+//                if(token){
+//                   res.status(200).json({status: 1,message:"Logged successfully",token:token})  
+//                }else{
+//                   res.status(401).json({status: 0,message:"Please Login"})   
+//                }
+//             //console.log('token---------',token
+//             //console.log('cookie',req.cookies);
 
-            //console.log(data,"login successfully")
-            //res.status(200).json({status: 1,message:"Logged successfully",token:token})
+//             //console.log(data,"login successfully")
+//             //res.status(200).json({status: 1,message:"Logged successfully",token:token})
 
-         } else if(data && data.role=="1") {
-            res.status(400).json({status:1,message:"Bad Credentials"})
-            // console.log('password problem')
-       }
-       } else if(data && data.role =="0"){
-         res.status(420).json({status:1,message:"Not an admin"})
+//          } else if(data && data.role=="admin") {
+//             res.status(400).json({status:1,message:"Bad Credentials"})
+//             // console.log('password problem')
+//        }
+//        } else if(data && data.role =="user"){
+//          res.status(420).json({status:1,message:"Not an admin"})
 
-       }
-    })
+//        }
+//     })
+
+
+
+
+
+
+
+
+    const adminLogin = async (req, res) => {
+      console.log("body",req.body)
+       await User.findOne({
+         where: {
+            email: req.body.email
+         },
+         raw: true
+      })
+       .then(data=>{
+         if(data && data.role=="admin"){
+            const hashedPassword = data.password
+            if(bcrypt.compareSync(req.body.password,hashedPassword)){
+               const token =jwt.sign({
+                  email:data.email
+               },process.env.secret,{expiresIn:'12hr'})
+               //res.cookie('adminToken',token,{maxAge:3600,httpOnly:true,secure:false})
+                  if(token){
+                     res.status(200).json({status: 1,message:"Logged successfully",token:token})  
+                  }else{
+                     res.status(401).json({status: 0,message:"Please Login"})   
+                  }
+               //console.log('token---------',token
+               //console.log('cookie',req.cookies);
+   
+               //console.log(data,"login successfully")
+               //res.status(200).json({status: 1,message:"Logged successfully",token:token})
+   
+            } else if(data && data.role=="admin") {
+               res.status(400).json({status:1,message:"Bad Credentials"})
+               // console.log('password problem')
+          }
+          } else if(data && data.role =="user"){
+            res.status(420).json({status:1,message:"Not an admin"})
+   
+          }
+       })
+    
 
 
 
@@ -146,12 +191,30 @@ const adminLogin = async (req, res) => {
    // }
 }
 
+// const verifyToken =(req,res)=>{
+//      //console.log('token alive');
+//         res.status(200).json({
+//           message:'Token Verified Successfully',
+//       flag: 1
+//         })
+// }
+
+
+
+
+
+
+
+
+
+
+
 const verifyToken =(req,res)=>{
-     //console.log('token alive');
-        res.status(200).json({
-          message:'Token Verified Successfully',
-      flag: 1
-        })
+   console.log('token alive');
+      res.status(200).json({
+        message:'Token Verified Successfully',
+    flag: 1
+      })
 }
 
 

@@ -53,9 +53,17 @@ app.use(AdminGalleryRouter)
 const AdminServiceRouter  = require("./Routes/AdminRoutes/AdminServices")
 app.use(AdminServiceRouter)
 
+const AdminRoleRouter = require('./Routes/AdminRoutes/AdminRoles')
+app.use(AdminRoleRouter)
+
+const AdminPermissionRouter = require("./Routes/AdminRoutes/AdminPermission")
+app.use(AdminPermissionRouter)
+
+const AdminModuleRouter = require("./Routes/AdminRoutes/AdminModules")
+app.use(AdminModuleRouter)
+
 const AdminLoginRouter = require("./Routes/AdminRoutes/AdminLogin")
 app.use(AdminLoginRouter)
-
 
 
 // const AdminRouter = require(`./Routes/AdminRoute`)

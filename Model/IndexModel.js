@@ -45,6 +45,10 @@ db.query = require('./Query')(sequelize, DataTypes)
 db.video = require('./Video')(sequelize, DataTypes)
 db.story = require('./Story')(sequelize, DataTypes)
 db.user = require('./User')(sequelize,DataTypes)
+db.role = require('./Role')(sequelize,DataTypes)
+db.module = require('./Module')(sequelize,DataTypes)
+db.rolepermission = require('./RolePermission')(sequelize,DataTypes)
+db.submodule= require('./SubModule')(sequelize,DataTypes)
 
 db.sequelize.sync({ force: false })
     .then(() => {
