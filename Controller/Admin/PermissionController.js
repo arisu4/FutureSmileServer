@@ -33,13 +33,32 @@ const showPermission = async (req, res) => {
     }
  }
 
+
+
+
 const updatePermission = async(req,res)=>{
-   console.log("permission body",req.body);
+   //console.log("permission body",req.body);
+const permissionbody = req.body
+console.log("permission",permissionbody)
+
+ const permissionids = permissionbody.map((permission) =>permission.id);
+ console.log("permissionid",permissionids)
+
+ for(let i=0;i<permissionids.length;i++){
+   const permissions = {
+         id :permissionids[i]
+       }
+       
+ console.log("get permissions",permissions.id)  
+      }
+
+
+
 
 //    console.log('body',req.body);
    
 //   const permissions = {
-//    // id :req.body.obj.id,
+//     id :req.body.obj.id,
 //   role_id : req.body.obj.role_id,
 //   module_id :req.body.obj.module_id ,
 //   sub_module_id :req.body.obj.sub_module_id,
@@ -67,9 +86,9 @@ const updatePermission = async(req,res)=>{
 //    where:{id:id}
 //  })
  
+   }
 
 
-}
 
  module.exports = {
     showPermission,
