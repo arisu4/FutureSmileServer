@@ -36,21 +36,92 @@ const showPermission = async (req, res) => {
 
 
 
+
+// var result = await models.student.update(student[i],{where :{id: student[i].id}});
+
+
 const updatePermission = async(req,res)=>{
-   //console.log("permission body",req.body);
-const permissionbody = req.body
-console.log("permission",permissionbody)
 
- const permissionids = permissionbody.map((permission) =>permission.id);
- console.log("permissionid",permissionids)
+//console.log("permission body",req.body);
+// const permissionbody = req.body
+// console.log("permission",permissionbody)
 
- for(let i=0;i<permissionids.length;i++){
+const body = req.body.map(permissions=>permissions)
+console.log("body",body)
+
+for(let i = 0;i<body.length;i++){
+   // console.log("loop id",body[i].id)
+   // console.log("role_id",body[i].role_id)
+   // console.log("module_id",body[i].module_id)
+   // console.log("sub_module_id",body[i].sub_module_id)
+   // console.log("module_access",body[i].module_access)
+   // console.log("sub_module_access",body[i].sub_module_access)
+
    const permissions = {
-         id :permissionids[i]
-       }
-       
- console.log("get permissions",permissions.id)  
-      }
+      id:body[i].id,
+      role_id:body[i].role_id,
+      module_id:body[i].module_id,
+      sub_module_id:body[i].sub_module_id,
+      module_access:body[i].module_access,
+      sub_module_access:body[i].sub_module_access,
+      access_item:body[i].access_item,
+      add_item:body[i].add_item,
+      edit_item:body[i].edit_item,
+      details_item:body[i].details_item,
+      delete_item:body[i].delete_item,
+      status_item:body[i].status_item
+   }
+    
+   await RolePermission.update(permissions, { where: { id: body[i].id} })
+   .then(() => {
+     console.log("updated permissions successfully");
+   })
+   
+
+}
+
+
+
+
+//  const id = req.body.map((permission)=>permission.id);
+//  console.log("permissionid",id)
+
+//  await RolePermission.update(req.body,{where:{id:id}})
+//   .then(()=>{
+//        res.status(200).json({ status: 1, message: 'Updated permissions successfully' })
+//       })
+
+
+
+//  for(let i=0;i<permissionids.length;i++){
+  
+//    let permissions = {
+//          id :permissionids[i],
+//          role_id:req.body.role_id,
+//          module_id:req.body.module_id,
+//          sub_module_id:req.body.sub_module_id,
+//          module_access:req.body.module_access,
+//          sub_module_access:req.body.sub_module_access,
+//          access_item:req.body.access_item,
+//          details_item:req.body.details_item,
+//          add_item:req.body.add_item,
+//          edit_item:req.body.edit_item,
+//          delete_item:req.body.delete_item,
+//          status_item:req.body.status_item
+//        }
+//        let result = await RolePermission.update(permissions[i],{
+//                where:{id:permissions.id}
+//        })
+//               console.log(permissions.id )
+//       }
+   
+     
+      // await  RolePermission.update(req.body,{
+      //    where:{id:permission.}
+      // })
+      // .then(()=>{
+      //  res.status(200).json({ status: 1, message: 'Updated permissions successfully' })
+      // })
 
 
 
