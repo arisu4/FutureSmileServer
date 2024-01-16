@@ -74,7 +74,7 @@ for(let i = 0;i<body.length;i++){
     
    await RolePermission.update(permissions, { where: { id: body[i].id} })
    .then(() => {
-     console.log("updated permissions successfully");
+     console.log("Updated permissions successfully.");
    })
    
 
