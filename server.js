@@ -8,6 +8,12 @@ const session = require('express-session')
 //const mysql = require('mysql')
 //const expressValidator = require('express-validator')
 //const path = require('path')
+
+
+
+
+
+
 require('dotenv').config()
 let cors = require('cors')
 
@@ -55,6 +61,12 @@ app.use(AdminServiceRouter)
 
 const AdminRoleRouter = require('./Routes/AdminRoutes/AdminRoles')
 app.use(AdminRoleRouter)
+
+const AdminRouter = require('././Routes/AdminRoutes/Admin')
+app.use(AdminRouter)
+
+// const AdminUserRouter = require('./Routes/AdminRoutes/AdminUser')
+// app.use(AdminUserRouter)
 
 const AdminPermissionRouter = require("./Routes/AdminRoutes/AdminPermission")
 app.use(AdminPermissionRouter)

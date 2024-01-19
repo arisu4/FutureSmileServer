@@ -1,7 +1,14 @@
+const db = require('../Model/IndexModel')
+
 module.exports = (sequelize,DataTypes) =>{
+
     const role = sequelize.define(`roles`,{
-     
-        role:{
+        id:{
+            type:DataTypes.STRING,
+            autoIncrement: true,
+            primaryKey: true
+        },
+        roles:{
             type:DataTypes.STRING,
             allowNull:false
         },
@@ -14,14 +21,12 @@ module.exports = (sequelize,DataTypes) =>{
             values:['SUPER_ADMIN','SUB_ADMIN','AGENCY_ADMIN'],
             allowNull:false   
         },
-      user_id:{
-        type:DataTypes.INTEGER,
-        allowNull:false,   
-      },
+   
         
         createdAt: DataTypes.DATE, 
-        updatedAt: DataTypes.DATE
-    })
+        updatedAt: DataTypes.DATE,
+        //tableName: 'roles'
+    });
 
     return role
 }

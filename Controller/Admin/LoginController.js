@@ -7,7 +7,7 @@ const cookie = require('cookie-parser')
 
 
 const User = db.user
-
+const Admin = db.admin
 
 //Query add
 // const createFaq = async (req, res) => {
@@ -207,7 +207,7 @@ const adminLogin = async (req, res) => {
       raw: true
    })
     .then(data=>{
-      if(data && data.role=="admin"|| data.role=="agency"){
+      if(data && data.roles=="admin"|| data.roles=="agency"){
          const hashedPassword = data.password
          if(bcrypt.compareSync(req.body.password,hashedPassword)){
             const token =jwt.sign({

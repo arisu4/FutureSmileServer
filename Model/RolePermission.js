@@ -24,6 +24,10 @@ module.exports = (sequelize,DataTypes) =>{
             type:DataTypes.INTEGER,
             allowNull:false   
         },
+        details_item:{
+            type:DataTypes.INTEGER,
+            allowNull:false   
+        },
         add_item:{
             type:DataTypes.INTEGER,
             allowNull:false   
@@ -32,10 +36,7 @@ module.exports = (sequelize,DataTypes) =>{
             type:DataTypes.INTEGER,
             allowNull:false   
         },
-        details_item:{
-            type:DataTypes.INTEGER,
-            allowNull:false   
-        },
+       
         delete_item:{
             type:DataTypes.INTEGER,
             allowNull:false   

@@ -1,12 +1,27 @@
 const { BelongsTo, BelongsToMany } = require('sequelize')
 const db = require('../../Model/IndexModel')
 const Role = db.role
-// const User = db.user
+const Admin = db.admin
+
 
 //const Users = require("../../Model/User")
 // const sequelize= require("sequelize")
 
-const showRoles = async (req, res) => {
+
+const showTypes=async(req,res)=>{
+   console.log("hello types");
+   Role.findAll({raw:true})
+   .then(types => {
+      let type=[]
+      for(let i=0;i<types.length;i++){
+      type.push({id:types[i].id,adminType:types[i].adminType})
+      }
+      console.log("type",type);
+      res.status(200).json(type)
+   })  
+}
+
+const showAdmins = async (req, res) => {
     console.log("hello role")
     const page = parseInt(req.query.page)
     const pageSize = parseInt(req.query.pageSize)
@@ -15,15 +30,15 @@ const showRoles = async (req, res) => {
     const endIndex = page * pageSize
  
     if (!search || search == "undefined") {
-       await Role.findAll({ raw: true })
-          .then(roles => {
-             const paginatedRoles= roles.slice(startIndex, endIndex)
-             const totalPages = Math.ceil(roles.length / pageSize)
-             res.status(200).json({ roles: paginatedRoles, totalPages })
+       await Admin.findAll({ raw: true })
+          .then(admins => {
+             const paginatedAdmins= admins.slice(startIndex, endIndex)
+             const totalPages = Math.ceil(admins.length / pageSize)
+             res.status(200).json({ admins: paginatedAdmins, totalPages })
  
           })
     } else {
-       await Role.findAll({
+       await Admin.findAll({
           where: {
              roles: {
                 [Op.like]: "%" + search + "%"
@@ -31,10 +46,10 @@ const showRoles = async (req, res) => {
           },
           raw: true
        })
-          .then(roles => {
-             const paginatedRoles = roles.slice(startIndex, endIndex)
-             const totalPages = Math.ceil(roles.length / pageSize)
-             res.status(200).json({ roles: paginatedRoles, totalPages })
+          .then(admins => {
+             const paginatedAdmins = admins.slice(startIndex, endIndex)
+             const totalPages = Math.ceil(admins.length / pageSize)
+             res.status(200).json({ admins: paginatedAdmins, totalPages })
           })
  
     }
@@ -96,5 +111,6 @@ const showRoles = async (req, res) => {
 // }
 
  module.exports = {
-    showRoles
+    showAdmins,
+    showTypes
  }
