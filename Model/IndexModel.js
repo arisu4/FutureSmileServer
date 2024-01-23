@@ -68,9 +68,17 @@ db.submodule= require('./SubModule')(sequelize,DataTypes)
 // Roles.hasMany(Users)
 // Users.belongsTo(Roles)
 db.role.hasMany(db.user, { constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE"})
-db.user.belongsTo(db.role, { constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
-
-
+//db.user.belongsTo(db.role, { constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
+// Roles.hasMany(Users)
+db.admin.belongsTo(db.role, { constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
+db.module.hasMany(db.submodule,{ constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
+db.submodule.belongsTo(db.module,{ constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
+db.role.hasMany(db.rolepermission,{ constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
+db.rolepermission.belongsTo(db.role,{ constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
+db.module.hasMany(db.rolepermission,{ constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
+db.rolepermission.belongsTo(db.module,{ constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
+db.submodule.hasMany(db.rolepermission,{ constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
+db.rolepermission.belongsTo(db.submodule,{ constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
 // db.user.sync({ force: false})
 // .then(() => {
 //   db.role.sync({ force: false}).then(() => {

@@ -1,5 +1,66 @@
 const { body } = require("express-validator");
 
+const adminValidation =[
+  body("name")
+  .not().isEmpty()
+  .withMessage("Name is required")
+  .isString().matches('[a-z]'|| '[A-Z]' )
+  .withMessage("Name should be string"),
+  body("email")
+  .not().isEmpty()
+  .withMessage("Email is required")
+  .isEmail()
+  .withMessage("Provide valid email"),
+  body("phone")
+  .optional()
+  .isNumeric().matches('[0-9]' )
+  .withMessage("Provide valid number")
+  .custom((value) => {
+    if (value.length !== 10) {
+      return Promise.reject("Phone number should be 10 digits");
+    } else {
+      return true;
+    }
+  }),
+  body("username")
+  .not().isEmpty()
+  .withMessage("Username is required")
+  .isString().matches('[a-z]'|| '[A-Z]' )
+  .withMessage("Username should be string"),
+  body("password")
+  .not().isEmpty()
+  .withMessage("password is required")
+  .isString().matches('[a-z]'|| '[A-Z]' )
+  .withMessage("password should be string"),
+  body("image")
+  .optional()
+  .not().isEmpty()
+  .withMessage("Image is required")
+  .isString().matches('[a-z]'|| '[A-Z]' )
+  .withMessage("Image should be string"),
+  body("roles")
+  .optional()
+  .not().isEmpty()
+  .withMessage("Image is required")
+  .isString().matches('[a-z]'|| '[A-Z]' )
+  .withMessage("Image should be string"),
+  body("roleId")
+  .not().isEmpty()
+  .withMessage("Please select admin type first"),
+  // .isNumeric().matches('[0-9]' )
+  // .withMessage("Role id must be from 0-9"),
+  body("adminType")
+  .not().isEmpty()
+  .withMessage(" Select admin type first"),
+  body("countryId")
+  .optional()
+  .not().isEmpty()
+  .withMessage("Please select admin type first")
+  .isNumeric().matches('[0-9]' )
+  .withMessage("Country Id must be from 0-9")
+]
+
+
 
 const contactValidation = [
   body("name")
@@ -154,6 +215,7 @@ const contactValidation = [
 
     
 module.exports = {
+  adminValidation,
   contactValidation,
   testimonialValidation,
   memberValidation,

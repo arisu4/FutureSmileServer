@@ -1,7 +1,7 @@
 module.exports = (sequelize,DataTypes) =>{
     const submodule = sequelize.define(`sub_modules`,{
      
-        module_id:{
+        moduleId:{
             type:DataTypes.INTEGER,
             allowNull:false
         },

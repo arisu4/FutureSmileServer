@@ -28,13 +28,14 @@ module.exports = (sequelize,DataTypes) =>{
             type:DataTypes.INTEGER,
             allowNull:false 
         },
-        profilePic:{
-            type:DataTypes.INTEGER,
+        image:{
+            type:DataTypes.STRING,
+            defaultValue:"N/A",
             allowNull:false 
         },
         roles:{
-            type:DataTypes.ENUM,
-            values:['admin','subadmin','user'],
+            type:DataTypes.STRING,
+            //values:['admin','subadmin','user'],
             // defaultValue: "user",
             allowNull:false
         },
@@ -46,7 +47,7 @@ module.exports = (sequelize,DataTypes) =>{
         adminType:{
             type:DataTypes.ENUM,
             values:['SUPER_ADMIN','SUB_ADMIN','AGENCY_ADMIN'],
-            allowNull:false   
+            allowNull:false,   
         },
         countryId:{
             type:DataTypes.INTEGER,

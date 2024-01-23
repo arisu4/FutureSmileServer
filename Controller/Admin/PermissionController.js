@@ -59,9 +59,9 @@ for(let i = 0;i<body.length;i++){
 
    const permissions = {
       id:body[i].id,
-      role_id:body[i].role_id,
-      module_id:body[i].module_id,
-      sub_module_id:body[i].sub_module_id,
+      roleId:body[i].roleId,
+      moduleId:body[i].moduleId,
+      subModuleId:body[i].subModuleId,
       module_access:body[i].module_access,
       sub_module_access:body[i].sub_module_access,
       access_item:body[i].access_item,

@@ -1,4 +1,5 @@
 const { BelongsTo, BelongsToMany } = require('sequelize')
+const { validationResult } = require('express-validator')
 const db = require('../../Model/IndexModel')
 const Role = db.role
 const Admin = db.admin
@@ -9,17 +10,51 @@ const Admin = db.admin
 
 
 const showTypes=async(req,res)=>{
-   console.log("hello types");
+   //console.log("hello types");
    Role.findAll({raw:true})
    .then(types => {
       let type=[]
       for(let i=0;i<types.length;i++){
       type.push({id:types[i].id,adminType:types[i].adminType})
       }
-      console.log("type",type);
+      //console.log("type",type);
       res.status(200).json(type)
    })  
 }
+
+
+const createAdmins = async(req,res) => {
+   const errors = validationResult(req)
+   console.log("formdata",req.body)
+   if (!errors.isEmpty() ) {
+      res.status(420).json({ status: 0, errors: errors.array() })
+   
+   }else{
+      let info = {
+         name:req.body.name,
+         email:req.body.email,
+         phone:req.body.phone,
+         username:req.body.username,
+         password:req.body.password,
+         image:req.body.image,
+         roles:req.body.roles,
+         roleId:req.body.roleId,
+         adminType:req.body.adminType,
+         countryId:req.body.countryId
+      }
+   
+      const admin = await Admin.create(info)
+         .then(data => {
+            if (data) {
+               res.status(200).json({ status: 1, message: `Added Admin Successfully.` })
+            }
+         })
+   }
+  
+     
+   }
+
+
 
 const showAdmins = async (req, res) => {
     console.log("hello role")
@@ -54,6 +89,42 @@ const showAdmins = async (req, res) => {
  
     }
  }
+
+ const editAdmin = async(req,res)=>{
+   console.log('this is edit function')
+   const id = req.params.id
+   //console.log(`editing ids`, req.params.id)
+   await Admin.findOne({
+      where: {
+         id: id
+      },
+      raw: true
+   })
+      .then(admins => {
+         res.status(200).json({ editadmins: admins })
+      })
+ }
+
+ const updateAdmin = async(req,res) => { 
+   const id = req.body.id
+   //console.log(`gallery  id`,id)
+   const admins = {
+      name:req.body.name,
+      email:req.body.email,
+      phone:req.body.phone,
+      username:req.body.username,
+      password:req.body.password,
+      image:req.file.filename,
+      roles:req.body.roles,
+      roleId:req.body.roleId,
+      adminType:req.body.adminType,
+      countryId:req.body.countryId
+   }
+   await Admin.update(admins, { where: { id: id } })
+      .then(() => {
+         res.status(200).json({ status: 1, message: 'Updated admin successfully' })
+      })
+ } 
 
 
 //  const showRoles = async (req, res) => {
@@ -111,6 +182,10 @@ const showAdmins = async (req, res) => {
 // }
 
  module.exports = {
+   
+    showTypes,
+    createAdmins,
     showAdmins,
-    showTypes
+    editAdmin,
+    updateAdmin
  }
