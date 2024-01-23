@@ -7,8 +7,8 @@ const Submodule = db.submodule
 
 const showModules = async (req, res) => {
    await Module.findAll({
+      order:[['orders','DESC']], 
       raw: true,
-      //order:['orders',DESC] 
    })
       .then(modules => {
          //  console.log('modules',modules)
@@ -31,9 +31,10 @@ const showModules = async (req, res) => {
 const showSubmodules = async (req, res) => {
    let id = req.params.id
    await Submodule.findAll({
+      include:{model:Module,attributes:['id','name','orders','createdAt','updatedAt']},
       where: { moduleId: id },
       raw: true
-   })
+      })
       .then(submodules => {
          res.status(200).json(submodules)
       })
