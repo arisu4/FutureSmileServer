@@ -55,40 +55,81 @@ const createAdmins = async(req,res) => {
    }
 
 
+// Original
+// const showAdmins = async (req, res) => {
+//     console.log("hello role")
+//     const page = parseInt(req.query.page)
+//     const pageSize = parseInt(req.query.pageSize)
+//     const search = req.query.search
+//     const startIndex = (page - 1) * pageSize
+//     const endIndex = page * pageSize
+ 
+//     if (!search || search == "undefined") {
+//        await Admin.findAll({ raw: true })
+//           .then(admins => {
+//              const paginatedAdmins= admins.slice(startIndex, endIndex)
+//              const totalPages = Math.ceil(admins.length / pageSize)
+//              res.status(200).json({ admins: paginatedAdmins, totalPages })
+ 
+//           })
+//     } else {
+//        await Admin.findAll({
+//           where: {
+//              roles: {
+//                 [Op.like]: "%" + search + "%"
+//              },
+//           },
+//           raw: true
+//        })
+//           .then(admins => {
+//              const paginatedAdmins = admins.slice(startIndex, endIndex)
+//              const totalPages = Math.ceil(admins.length / pageSize)
+//              res.status(200).json({ admins: paginatedAdmins, totalPages })
+//           })
+ 
+//     }
+//  }
 
-const showAdmins = async (req, res) => {
-    console.log("hello role")
-    const page = parseInt(req.query.page)
-    const pageSize = parseInt(req.query.pageSize)
-    const search = req.query.search
-    const startIndex = (page - 1) * pageSize
-    const endIndex = page * pageSize
- 
-    if (!search || search == "undefined") {
-       await Admin.findAll({ raw: true })
-          .then(admins => {
-             const paginatedAdmins= admins.slice(startIndex, endIndex)
-             const totalPages = Math.ceil(admins.length / pageSize)
-             res.status(200).json({ admins: paginatedAdmins, totalPages })
- 
-          })
-    } else {
-       await Admin.findAll({
-          where: {
-             roles: {
-                [Op.like]: "%" + search + "%"
-             },
-          },
-          raw: true
-       })
-          .then(admins => {
-             const paginatedAdmins = admins.slice(startIndex, endIndex)
-             const totalPages = Math.ceil(admins.length / pageSize)
-             res.status(200).json({ admins: paginatedAdmins, totalPages })
-          })
- 
-    }
- }
+ const showAdmins = async (req, res) => {
+   console.log("hello role")
+   const page = parseInt(req.query.page)
+   const pageSize = parseInt(req.query.pageSize)
+   const search = req.query.search
+   const startIndex = (page - 1) * pageSize
+   const endIndex = page * pageSize
+
+   if (!search || search == "undefined") {
+      await Admin.findAll({
+         include: [{
+            model: Role, attribute: ['id'],
+            as:"admin",  
+            }],
+          
+          raw: true })
+         .then(admins => {
+            //console.log("admins",admins)
+            const paginatedAdmins= admins.slice(startIndex, endIndex)
+            const totalPages = Math.ceil(admins.length / pageSize)
+            res.status(200).json({ admins: paginatedAdmins, totalPages })
+
+         })
+   } else {
+      await Admin.findAll({
+         where: {
+            roles: {
+               [Op.like]: "%" + search + "%"
+            },
+         },
+         raw: true
+      })
+         .then(admins => {
+            const paginatedAdmins = admins.slice(startIndex, endIndex)
+            const totalPages = Math.ceil(admins.length / pageSize)
+            res.status(200).json({ admins: paginatedAdmins, totalPages })
+         })
+
+   }
+}
 
  const editAdmin = async(req,res)=>{
    console.log('this is edit function')

@@ -1,7 +1,14 @@
 const db = require('../../Model/IndexModel')
 const RolePermission = db.rolepermission
 const { Op } = require('sequelize')
+const Role = db.role
+const Module = db.module
+const Submodule = db.submodule
 
+
+
+
+// Original code
 const showPermission = async (req, res) => {
     console.log("hello module")
     const page = parseInt(req.query.page)
@@ -32,6 +39,53 @@ const showPermission = async (req, res) => {
           })
     }
  }
+
+
+
+//  const showPermission = async (req, res) => {
+//    console.log("hello module")
+//    const page = parseInt(req.query.page)
+//    const pageSize = parseInt(req.query.pageSize)
+//    const search = req.query.search
+//    const startIndex = (page - 1) * pageSize
+//    const endIndex = page * pageSize
+//    if (!search || search == "undefined") {
+//       await RolePermission.findAll({
+//          // include:[{
+//          //    model:Role,attribute:['id'],
+//          //    as:"rolepermission",
+//             include:[{
+//                model:Module,attribute:['id'],
+//                as:"modulepermission",
+//                include:[{
+//                   model:Submodule,attribute:['id'],
+//                   as:"module"
+//                }]
+//             }],
+//          // }],
+//           raw: true })
+//          .then(permissions => {
+//             console.log("permissions",permissions);
+//             const paginatedPermissions= permissions.slice(startIndex, endIndex)
+//             const totalPages = Math.ceil(permissions.length / pageSize)
+//             res.status(200).json({ permissions: paginatedPermissions, totalPages })
+//          })
+//    } else {
+//       await RolePermission.findAll({
+//          where: {
+//             module_id: {
+//                [Op.like]: "%" + search + "%"
+//             },
+//          },
+//          raw: true
+//       })
+//          .then(permissions => {
+//             const paginatedPermissions = permissions.slice(startIndex, endIndex)
+//             const totalPages = Math.ceil(permissions.length / pageSize)
+//             res.status(200).json({ permissions: paginatedPermissions, totalPages })
+//          })
+//    }
+// }
 
 
 
