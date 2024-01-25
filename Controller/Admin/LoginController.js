@@ -8,6 +8,7 @@ const cookie = require('cookie-parser')
 
 const User = db.user
 const Admin = db.admin
+const Role = db.role
 
 //Query add
 // const createFaq = async (req, res) => {
@@ -240,9 +241,16 @@ const register = async (req, res) => {
          where: {
             email: req.body.email
          },
+         attributes:{exclude:['name','phone','username','image','adminType','countryId','status','createdAt','updatedAt']}, 
+         include:[{
+            model:Role,
+            attributes:['Id'],
+            as:"role"
+           }], 
          raw: true
       })
        .then(data=>{
+         console.log("login",data);
          if(data && data.roles=="admin"|| data.roles=="agency"){
             const hashedPassword = data.password
             if(bcrypt.compareSync(req.body.password,hashedPassword)){
