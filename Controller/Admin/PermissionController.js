@@ -51,9 +51,9 @@ const showPermission = async (req, res) => {
 //    const endIndex = page * pageSize
 //    if (!search || search == "undefined") {
 //       await RolePermission.findAll({
-//          // include:[{
-//          //    model:Role,attribute:['id'],
-//          //    as:"rolepermission",
+//          include:[{
+//             model:Role,attribute:['id'],
+//             as:"rolepermission",
 //             include:[{
 //                model:Module,attribute:['id'],
 //                as:"modulepermission",
@@ -62,7 +62,7 @@ const showPermission = async (req, res) => {
 //                   as:"module"
 //                }]
 //             }],
-//          // }],
+//           }],
 //           raw: true })
 //          .then(permissions => {
 //             console.log("permissions",permissions);

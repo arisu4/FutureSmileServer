@@ -71,14 +71,18 @@ db.role.hasMany(db.admin, { foreignKey:"roleId",as:"role" ,constraints: true, on
 //db.user.belongsTo(db.role, { constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
 // Roles.hasMany(Users)
 db.admin.belongsTo(db.role,{foreignKey:"roleId",as:"admin" , constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
-db.module.hasMany(db.submodule,{ foreignKey:"moduleId",as:"module" ,constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
-db.submodule.belongsTo(db.module,{foreignKey:"moduleId",as:"submodule", constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
+db.module.hasMany(db.submodule,{ foreignKey:"moduleId",as:"submodule" ,constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
+db.submodule.belongsTo(db.module,{foreignKey:"moduleId",as:"module", constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
 db.role.hasMany(db.rolepermission,{foreignKey:"roleId",as:"roleallow" ,constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
 db.rolepermission.belongsTo(db.role,{ foreignKey:"roleId",as:"rolepermission",constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
-db.module.hasMany(db.rolepermission,{ foreignKey:"moduleId",as:"modules",constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
-db.rolepermission.belongsTo(db.module,{ foreignKey:"moduleId",as:"modulepermission",constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
-db.submodule.hasMany(db.rolepermission,{ foreignKey:"subModuleId",as:"submodules",constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
-db.rolepermission.belongsTo(db.submodule,{foreignKey:"subModuleId",as:"submodulepermission", constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
+db.module.hasMany(db.rolepermission,{ foreignKey:"moduleId",as:"modulepermission",constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
+db.rolepermission.belongsTo(db.module,{ foreignKey:"moduleId",as:"modulepermit",constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
+db.submodule.hasMany(db.rolepermission,{ foreignKey:"subModuleId",as:"submodulepermission",constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
+db.rolepermission.belongsTo(db.submodule,{foreignKey:"subModuleId",as:"submodulepermit", constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
+// db.role.belongsTo(db.module,{as:"rolemodule", constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
+// db.module.belongsTo(db.role,{as:"modulerole", constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
+
+
 // db.user.sync({ force: false})
 // .then(() => {
 //   db.role.sync({ force: false}).then(() => {

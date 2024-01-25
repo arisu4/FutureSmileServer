@@ -45,19 +45,44 @@ const showModules = async (req, res) => {
 
 
 //Usable code
+// const showSubmodules = async (req, res) => {
+//    let id = req.params.id
+//    await Submodule.findAll({
+//       where: { moduleId: id },
+//       include: [{
+//          model: Module, attribute: ['id'],
+//          as:"submodule"
+//      }],
+    
+//       raw: true
+//       })
+//       .then(submodules => {
+//           console.log("submodule",submodules);
+//          res.status(200).json(submodules)
+//       })
+// }
+
+
 const showSubmodules = async (req, res) => {
    let id = req.params.id
    await Submodule.findAll({
       where: { moduleId: id },
-      include: [{
-         model: Module, attribute: ['id'],
-         as:"submodule"
-     }],
-    
+      attributes:{exclude:['createdAt','updatedAt']},
+      // include: [{
+      //    model: Module, attributes: ['id'],
+      //    as:"module",
+        include:[{
+         model:Permission,
+         attributes:['subModuleId','module_access','sub_module_access'],
+         as:"submodulepermission"
+        }], 
+   //   }],
       raw: true
       })
       .then(submodules => {
-          //console.log("submodule",submodules);
+         // let module_access  = submodules.sub_module_access
+          console.log("access")
+         console.log("submodule",submodules);
          res.status(200).json(submodules)
       })
 }
