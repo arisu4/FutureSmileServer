@@ -7,7 +7,7 @@ module.exports = (sequelize,DataTypes) =>{
         },
         link:{
             type:DataTypes.STRING,
-            allowNull:false   
+            allowNull:false
         },
         sub_module_name:{
             type:DataTypes.STRING,

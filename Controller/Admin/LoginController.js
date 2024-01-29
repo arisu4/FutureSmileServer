@@ -198,7 +198,11 @@ const register = async (req, res) => {
    //    }
    // }
 
-// Admin login with admin and agency
+
+
+
+
+   // Admin login with admin and agency original 2
 // const adminLogin = async (req, res) => {
 //    console.log("body",req.body)
 //     await User.findOne({
@@ -235,6 +239,13 @@ const register = async (req, res) => {
 //    }
 
 
+
+
+
+
+
+
+
    const adminLogin = async (req, res) => {
       console.log("body",req.body)
        await Admin.findOne({
@@ -250,16 +261,18 @@ const register = async (req, res) => {
          raw: true
       })
        .then(data=>{
-         console.log("login",data);
+        
          if(data && data.roles=="admin"|| data.roles=="agency"){
+            const roleId = data.roleId
             const hashedPassword = data.password
             if(bcrypt.compareSync(req.body.password,hashedPassword)){
                const token =jwt.sign({
-                  email:data.email
+                  email:data.email,
                },process.env.secret,{expiresIn:'3hr'})
                //res.cookie('adminToken',token,{maxAge:3600,httpOnly:true,secure:false})
                   if(token){
-                     res.status(200).json({status: 1,message:"Logged successfully",token:token})  
+   
+                     res.status(200).json({status: 1,message:"Logged successfully",token:token,roleId:roleId})  
                   }else{
                      res.status(401).json({status: 0,message:"Please Login"})   
                   }
@@ -277,6 +290,8 @@ const register = async (req, res) => {
    
       }
     
+
+
 
 
 

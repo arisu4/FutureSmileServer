@@ -1,4 +1,6 @@
-const { BelongsTo, BelongsToMany } = require('sequelize')
+const { Sequelize} = require(`sequelize`)
+
+//const { BelongsTo, BelongsToMany } = require('sequelize')
 const { validationResult } = require('express-validator')
 const db = require('../../Model/IndexModel')
 const Role = db.role
@@ -55,7 +57,7 @@ const createAdmins = async(req,res) => {
    }
 
 
-// Original
+// Original 1
 // const showAdmins = async (req, res) => {
 //     console.log("hello role")
 //     const page = parseInt(req.query.page)
@@ -90,7 +92,51 @@ const createAdmins = async(req,res) => {
 //     }
 //  }
 
- const showAdmins = async (req, res) => {
+
+//Original wit n 'on' clause
+//  const showAdmins = async (req, res) => {
+//    console.log("hello role")
+//    const page = parseInt(req.query.page)
+//    const pageSize = parseInt(req.query.pageSize)
+//    const search = req.query.search
+//    const startIndex = (page - 1) * pageSize
+//    const endIndex = page * pageSize
+
+//    if (!search || search == "undefined") {
+//       await Admin.findAll({
+//          include: [{
+//             model: Role, attribute: ['id'],
+//             as:"role",  
+//             }],
+          
+//           raw: true })
+//          .then(admins => {
+//             //console.log("admins",admins)
+//             const paginatedAdmins= admins.slice(startIndex, endIndex)
+//             const totalPages = Math.ceil(admins.length / pageSize)
+//             res.status(200).json({ admins: paginatedAdmins, totalPages })
+
+//          })
+//    } else {
+//       await Admin.findAll({
+//          where: {
+//             roles: {
+//                [Op.like]: "%" + search + "%"
+//             },
+//          },
+//          raw: true
+//       })
+//          .then(admins => {
+//             const paginatedAdmins = admins.slice(startIndex, endIndex)
+//             const totalPages = Math.ceil(admins.length / pageSize)
+//             res.status(200).json({ admins: paginatedAdmins, totalPages })
+//          })
+
+//    }
+// }
+
+
+const showAdmins = async (req, res) => {
    console.log("hello role")
    const page = parseInt(req.query.page)
    const pageSize = parseInt(req.query.pageSize)
@@ -100,14 +146,19 @@ const createAdmins = async(req,res) => {
 
    if (!search || search == "undefined") {
       await Admin.findAll({
+         attributes:{exclude:['createdAt','updatedAt']}, 
          include: [{
-            model: Role, attribute: ['id'],
-            as:"admin",  
+            model: Role, 
+            as:"role",
+            on: {
+               roleId: Sequelize.where(Sequelize.col("roleId"), "=", Sequelize.col("role.id")),
+            },
+            attributes: []    
             }],
           
           raw: true })
          .then(admins => {
-            //console.log("admins",admins)
+            console.log("admins",admins)
             const paginatedAdmins= admins.slice(startIndex, endIndex)
             const totalPages = Math.ceil(admins.length / pageSize)
             res.status(200).json({ admins: paginatedAdmins, totalPages })

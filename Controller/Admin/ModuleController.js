@@ -1,3 +1,4 @@
+const { Sequelize} = require(`sequelize`)
 const db = require('../../Model/IndexModel')
 const SubModule = require('../../Model/SubModule')
 const Module = db.module
@@ -9,7 +10,7 @@ const Role = db.role
 
 const showModules = async (req, res) => {
    await Module.findAll({
-      order:[['orders','ASC']], 
+      order:[['orders','DESC']], 
       raw: true,
    })
       .then(modules => {
@@ -18,7 +19,20 @@ const showModules = async (req, res) => {
       })
 }
 
-// original
+// original 1
+// const showSubmodules = async (req, res) => {
+//    let id = req.params.id
+//    await Submodule.findAll({
+//       where: { moduleId: id },
+//       raw: true
+//    })
+//       .then(submodules => {
+//          res.status(200).json(submodules)
+//       })
+// }
+
+
+// original 2
 // const showSubmodules = async (req, res) => {
 //    let id = req.params.id
 //    await Submodule.findAll({
@@ -44,14 +58,14 @@ const showModules = async (req, res) => {
 // }
 
 
-//Usable code
+//Usable code 1
 // const showSubmodules = async (req, res) => {
 //    let id = req.params.id
 //    await Submodule.findAll({
 //       where: { moduleId: id },
 //       include: [{
 //          model: Module, attribute: ['id'],
-//          as:"submodule"
+//          as:"module"
 //      }],
     
 //       raw: true
@@ -63,29 +77,62 @@ const showModules = async (req, res) => {
 // }
 
 
+//Usable code 2
 const showSubmodules = async (req, res) => {
    let id = req.params.id
    await Submodule.findAll({
       where: { moduleId: id },
-      attributes:{exclude:['createdAt','updatedAt']},
-      // include: [{
-      //    model: Module, attributes: ['id'],
-      //    as:"module",
-        include:[{
-         model:Permission,
-         attributes:['subModuleId','module_access','sub_module_access'],
-         as:"submodulepermission"
-        }], 
+      attributes:{exclude:['createdAt','updatedAt']}, 
+      include: [{
+         model: Module,
+         as:"module",
+         on: {
+            moduleId: Sequelize.where(Sequelize.col("moduleId"), "=", Sequelize.col("module.id")),
+         },
+         attributes: [] 
+     }],
+   //   include:[{
+   //    model:Permission,
+   //    as:"module",
+   //    on: {
+   //       moduleId: Sequelize.where(Sequelize.col("moduleId"), "=", Sequelize.col("module.id")),
+   //    },
+   //    attributes: [] 
    //   }],
+    
       raw: true
       })
       .then(submodules => {
-         // let module_access  = submodules.sub_module_access
-          console.log("access")
-         console.log("submodule",submodules);
+          console.log("submodule",submodules);
          res.status(200).json(submodules)
       })
 }
+
+
+
+// const showSubmodules = async (req, res) => {
+//    let id = req.params.id
+//    await Submodule.findAll({
+//       where: { moduleId: id },
+//       attributes:{exclude:['createdAt','updatedAt']},
+//       // include: [{
+//       //    model: Module, attributes: ['id'],
+//       //    as:"module",
+//         include:[{
+//          model:Permission,
+//          attributes:['subModuleId','module_access','sub_module_access'],
+//          as:"submodulepermission"
+//         }], 
+//    //   }],
+//       raw: true
+//       })
+//       .then(submodules => {
+//          // let module_access  = submodules.sub_module_access
+//           console.log("access")
+//          console.log("submodule",submodules);
+//          res.status(200).json(submodules)
+//       })
+// }
 
 
 
