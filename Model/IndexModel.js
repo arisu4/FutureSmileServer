@@ -79,9 +79,11 @@ db.module.hasMany(db.rolepermission,{ foreignKey:"moduleId",as:"modulepermission
 db.rolepermission.belongsTo(db.module,{ foreignKey:"moduleId",as:"modulepermit",constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
 db.submodule.hasMany(db.rolepermission,{ foreignKey:"subModuleId",as:"submodulepermission",constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
 db.rolepermission.belongsTo(db.submodule,{foreignKey:"subModuleId",as:"submodulepermit", constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
-// db.role.belongsTo(db.module,{as:"rolemodule", constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
+// db.role.hasMany(db.module,{as:"rolemodule", constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
 // db.module.belongsTo(db.role,{as:"modulerole", constraints: true, onUpdate: "CASCADE", onDelete:"CASCADE" })
 
+// db.role.hasMany(db.module)
+// db.module.belongsToMany(db.role)
 
 // db.user.sync({ force: false})
 // .then(() => {

@@ -41,36 +41,36 @@ const Submodule = db.submodule
 
 
 // Original code 2
-// const showPermission = async (req, res) => {
-//     console.log("hello module")
-//     const page = parseInt(req.query.page)
-//     const pageSize = parseInt(req.query.pageSize)
-//     const search = req.query.search
-//     const startIndex = (page - 1) * pageSize
-//     const endIndex = page * pageSize
-//     if (!search || search == "undefined") {
-//        await RolePermission.findAll({ raw: true })
-//           .then(permissions => {
-//              const paginatedPermissions= permissions.slice(startIndex, endIndex)
-//              const totalPages = Math.ceil(permissions.length / pageSize)
-//              res.status(200).json({ permissions: paginatedPermissions, totalPages })
-//           })
-//     } else {
-//        await RolePermission.findAll({
-//           where: {
-//              module_id: {
-//                 [Op.like]: "%" + search + "%"
-//              },
-//           },
-//           raw: true
-//        })
-//           .then(permissions => {
-//              const paginatedPermissions = permissions.slice(startIndex, endIndex)
-//              const totalPages = Math.ceil(permissions.length / pageSize)
-//              res.status(200).json({ permissions: paginatedPermissions, totalPages })
-//           })
-//     }
-//  }
+const showPermission = async (req, res) => {
+    console.log("hello module")
+    const page = parseInt(req.query.page)
+    const pageSize = parseInt(req.query.pageSize)
+    const search = req.query.search
+    const startIndex = (page - 1) * pageSize
+    const endIndex = page * pageSize
+    if (!search || search == "undefined") {
+       await RolePermission.findAll({ raw: true })
+          .then(permissions => {
+             const paginatedPermissions= permissions.slice(startIndex, endIndex)
+             const totalPages = Math.ceil(permissions.length / pageSize)
+             res.status(200).json({ permissions: paginatedPermissions, totalPages })
+          })
+    } else {
+       await RolePermission.findAll({
+          where: {
+             module_id: {
+                [Op.like]: "%" + search + "%"
+             },
+          },
+          raw: true
+       })
+          .then(permissions => {
+             const paginatedPermissions = permissions.slice(startIndex, endIndex)
+             const totalPages = Math.ceil(permissions.length / pageSize)
+             res.status(200).json({ permissions: paginatedPermissions, totalPages })
+          })
+    }
+ }
 
 
 //  Original  addition of modules 1
@@ -120,64 +120,64 @@ const Submodule = db.submodule
 // }
 
  //Original  addition of modules 2
- const showPermission = async (req, res) => {
-   console.log("hello module")
-   const page = parseInt(req.query.page)
-   const pageSize = parseInt(req.query.pageSize)
-   const search = req.query.search
-   const startIndex = (page - 1) * pageSize
-   const endIndex = page * pageSize
-   if (!search || search == "undefined") {
-      await RolePermission.findAll({
-         include:[{
-            model:Role,
-            as:"rolepermission",
-            on: {
-               roleId: Sequelize.where(Sequelize.col("roleId"), "=", Sequelize.col("role.id")),
-            },
-            attributes: [],
-         }],
-         include:[{
-               model:Module,
-               as:"modulepermit",
-               on: {
-                  moduleId: Sequelize.where(Sequelize.col("moduleId"), "=", Sequelize.col("module.id")),
-               },
-               attributes: [], 
+//  const showPermission = async (req, res) => {
+//    console.log("hello module")
+//    const page = parseInt(req.query.page)
+//    const pageSize = parseInt(req.query.pageSize)
+//    const search = req.query.search
+//    const startIndex = (page - 1) * pageSize
+//    const endIndex = page * pageSize
+//    if (!search || search == "undefined") {
+//       await RolePermission.findAll({
+//          include:[{
+//             model:Role,
+//             as:"rolepermission",
+//             on: {
+//                roleId: Sequelize.where(Sequelize.col("roleId"), "=", Sequelize.col("role.id")),
+//             },
+//             attributes: [],
+//          }],
+//          include:[{
+//                model:Module,
+//                as:"modulepermit",
+//                on: {
+//                   moduleId: Sequelize.where(Sequelize.col("moduleId"), "=", Sequelize.col("module.id")),
+//                },
+//                attributes: [], 
               
-            }],
-         include:[{
-                  model:Submodule,
-                  as:"submodulepermit",
-                  on: {
-                     subModuleId: Sequelize.where(Sequelize.col("subModuleId"), "=", Sequelize.col("submodule.id")),
-                  },
-                  attributes: [], 
-               }],
-          raw: true })
+//             }],
+//          include:[{
+//                   model:Submodule,
+//                   as:"submodulepermit",
+//                   on: {
+//                      subModuleId: Sequelize.where(Sequelize.col("Submodule.subModuleId"), "=", Sequelize.col("submodule.id")),
+//                   },
+//                   attributes: [], 
+//                }],
+//           raw: true })
           
-         .then(permissions => {
-            console.log("permissions",permissions);
-            const paginatedPermissions= permissions.slice(startIndex, endIndex)
-            const totalPages = Math.ceil(permissions.length / pageSize)
-            res.status(200).json({ permissions: paginatedPermissions, totalPages })
-         })
-   } else {
-      await RolePermission.findAll({
-         where: {
-            module_id: {
-               [Op.like]: "%" + search + "%"
-            },
-         },
-         raw: true
-      })
-         .then(permissions => {
-            const paginatedPermissions = permissions.slice(startIndex, endIndex)
-            const totalPages = Math.ceil(permissions.length / pageSize)
-            res.status(200).json({ permissions: paginatedPermissions, totalPages })
-         })
-   }
-}
+//          .then(permissions => {
+//             console.log("permissions",permissions);
+//             const paginatedPermissions= permissions.slice(startIndex, endIndex)
+//             const totalPages = Math.ceil(permissions.length / pageSize)
+//             res.status(200).json({ permissions: paginatedPermissions, totalPages })
+//          })
+//    } else {
+//       await RolePermission.findAll({
+//          where: {
+//             module_id: {
+//                [Op.like]: "%" + search + "%"
+//             },
+//          },
+//          raw: true
+//       })
+//          .then(permissions => {
+//             const paginatedPermissions = permissions.slice(startIndex, endIndex)
+//             const totalPages = Math.ceil(permissions.length / pageSize)
+//             res.status(200).json({ permissions: paginatedPermissions, totalPages })
+//          })
+//    }
+// }
 
 
 

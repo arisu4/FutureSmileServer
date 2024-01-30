@@ -4,7 +4,7 @@ module.exports = (sequelize,DataTypes) =>{
    
     const user = sequelize.define(`users`,{
         id:{
-            type:DataTypes.STRING,
+            type:DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true
         },
@@ -17,9 +17,9 @@ module.exports = (sequelize,DataTypes) =>{
             allowNull:false
         },
         roles:{
-            type:DataTypes.ENUM,
-            values:['admin','subadmin','user'],
-            defaultValue: "user",
+            type:DataTypes.STRING,
+            // values:['admin','subadmin','user'],
+            // defaultValue: "user",
             allowNull:false
         },
         roleId:{

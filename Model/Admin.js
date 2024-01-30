@@ -4,7 +4,7 @@ module.exports = (sequelize,DataTypes) =>{
    
     const admin = sequelize.define(`admins`,{
         id:{
-            type:DataTypes.STRING,
+            type:DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true
         },
@@ -21,11 +21,11 @@ module.exports = (sequelize,DataTypes) =>{
             allowNull:false
         },
         username:{
-            type:DataTypes.INTEGER,
+            type:DataTypes.STRING,
             allowNull:false 
         },
         password:{
-            type:DataTypes.INTEGER,
+            type:DataTypes.STRING,
             allowNull:false 
         },
         image:{
