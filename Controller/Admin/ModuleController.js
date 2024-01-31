@@ -127,12 +127,15 @@ console.log('module Id',req.params.id);
       //    as:"submodulepermission"
       //   }], 
        }],
-      raw: true
+      raw: true,
+      nest:true
       })
       .then(submodules => {
          // let module_access  = submodules.sub_module_access
-          console.log("access")
-         console.log("submodule",submodules);
+      
+       
+         console.log("submodule access",submodules);
+         //submodules.setDataValue("sub_module_name",sub_module_name)
          res.status(200).json(submodules)
       })
 }
