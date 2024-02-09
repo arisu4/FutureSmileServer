@@ -5,6 +5,8 @@ const { Op } = require('sequelize')
 const Role = db.role
 const Module = db.module
 const Submodule = db.submodule
+const Permission = db.rolepermission
+
 
 
 // Original code 1
@@ -307,8 +309,85 @@ for(let i = 0;i<body.length;i++){
    }
 
 
+   const permitProvider = async(req,res)=>{
+       let roleId = req.params.roleId
+       let moduleId= req.params.moduleId
+        console.log("permission roleId",roleId);
+        console.log("permission moduleId",moduleId); 
+       await  Permission.findAll({
+         where: { roleId: roleId,
+         sub_module_access:1 },
+         attributes: { exclude: ['access_item', 'details_item', 'add_item', 'edit_item', 'delete_item', 'status_item', 'createdAt', 'updatedAt'] },
+         include: [{
+            model: Submodule,
+            attributes: ['sub_module_name', 'link'],
+            where: { moduleId: moduleId },
+            as: "submodulepermit",
+            //   include:[{
+            //    model:Permission,
+            //    attributes:['roleId','subModuleId','module_access','sub_module_access',],
+            //    as:"submodulepermission"
+            //   }], 
+         }],
+         raw: true,
+         nest: true,
+      })
+         .then(permission => {
+            // let module_access  = submodules.sub_module_access
+   
+   
+            console.log("permission access", permission);
+            //submodules.setDataValue("sub_module_name",sub_module_name)
+            res.status(200).json({access:permission,})
+         })
+     //res.status(200).json(roleId)
+   }
+
+
+
+   // const showSubmodules = async (req, res) => {
+   //    console.log('role Id', req.params.roleId);
+   //    console.log('module Id', req.params.id);
+   //    let roleId = req.params.roleId
+   //    let moduleId = req.params.id
+   //    await Permission.findAll({
+   //       where: { roleId: roleId,
+   //       sub_module_access:1 },
+   //       attributes: { exclude: ['access_item', 'details_item', 'add_item', 'edit_item', 'delete_item', 'status_item', 'createdAt', 'updatedAt'] },
+   //       include: [{
+   //          model: Submodule,
+   //          attributes: ['sub_module_name', 'link'],
+   //          where: { moduleId: moduleId },
+   //          as: "submodulepermit",
+   //          //   include:[{
+   //          //    model:Permission,
+   //          //    attributes:['roleId','subModuleId','module_access','sub_module_access',],
+   //          //    as:"submodulepermission"
+   //          //   }], 
+   //       }],
+   //       raw: true,
+   //       nest: true
+   //    })
+   //       .then(submodules => {
+   //          // let module_access  = submodules.sub_module_access
+   
+   
+   //          console.log("submodule access", submodules);
+   //          //submodules.setDataValue("sub_module_name",sub_module_name)
+   //          res.status(200).json(submodules)
+   //       })
+   // }
+   
+   
+   
+   
+   
+   
+
+
 
  module.exports = {
     showPermission,
-    updatePermission
+    updatePermission,
+    permitProvider
  }

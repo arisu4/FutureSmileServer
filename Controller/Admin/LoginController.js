@@ -264,6 +264,7 @@ const register = async (req, res) => {
         
          if(data && data.roles=="admin"|| data.roles=="agency"){
             const roleId = data.roleId
+            const rolename = data.roles
             const hashedPassword = data.password
             if(bcrypt.compareSync(req.body.password,hashedPassword)){
                const token =jwt.sign({
@@ -272,7 +273,7 @@ const register = async (req, res) => {
                //res.cookie('adminToken',token,{maxAge:3600,httpOnly:true,secure:false})
                   if(token){
    
-                     res.status(200).json({status: 1,message:"Logged successfully",token:token,roleId:roleId})  
+                     res.status(200).json({status: 1,message:"Logged successfully",token:token,roleId:roleId,rolename:rolename})  
                   }else{
                      res.status(401).json({status: 0,message:"Please Login"})   
                   }

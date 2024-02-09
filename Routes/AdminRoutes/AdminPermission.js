@@ -8,5 +8,7 @@ Router.get("/admin/permission",permissionController.showPermission)
 
 Router.post("/admin/updatepermission",permissionController.updatePermission)
 
+Router.get("/admin/permitprovider/:roleId/:moduleId",permissionController.permitProvider)
+
 module.exports = Router
 
