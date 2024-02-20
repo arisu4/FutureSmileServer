@@ -1,10 +1,10 @@
 const db = require('../../Model/IndexModel')
-const user = require('../../Model/User')
+// const user = require('../../Model/User')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
 const cookie = require('cookie-parser')
 //const { Op } = require('sequelize')
-
+const nodemailer = require('nodemailer'); 
 
 const User = db.user
 const Admin = db.admin
@@ -35,8 +35,31 @@ const Role = db.role
 //    }
 // }
 
+//original registration
+// const register = async (req, res) => {
+//    console.log('email', req.body.email)
+//    console.log('password', req.body.password)
+//    //const email = req.body.email
+//    //const password = req.body.password
 
-const register = async (req, res) => {
+//    const info = {
+//       email: req.body.email,
+//       password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10)),
+
+//    };
+//    await User.create(info)
+//       .then(users => {
+//          if (users) {
+//             res.status(200).json({ status: 1, message: `Added Information  Successfully.` })
+//          }
+//       })
+// }
+
+
+
+
+
+const register = async(req, res) => {
    console.log('email', req.body.email)
    console.log('password', req.body.password)
    //const email = req.body.email
@@ -45,15 +68,53 @@ const register = async (req, res) => {
    const info = {
       email: req.body.email,
       password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10)),
-
    };
    await User.create(info)
       .then(users => {
          if (users) {
+            const transporter = nodemailer.createTransport({
+               //service: "Gmail",
+               host: "smtp.gmail.com",
+                port:465,
+               secure: true,
+               requireTLS: false,
+               auth: {
+                 user: "a37164710@gmail.com",
+                 pass: "jrsnssdzpkdvxwqu"
+               }
+             });
+             const mailOptions = {
+               from: "juvenile@gmail.com",
+               to: users.email,
+               subject: 'Future smile registration confirmation mail',
+               text: 'Yo have registered successfully in Smile app',
+               //html: `
+               //  <h1>Sample Heading Here</h1>
+               //  <p>message here</p>
+               //`,
+               // attachments: [
+               //   {
+               //     filename: 'image.png',
+               //     path: '<https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png>'
+               //   }
+               // ]
+             };
+             
+             transporter.sendMail(mailOptions, function(error, info){
+               if (error) {
+                 console.log(error);
+               } else {
+                 console.log('Email sent: ' + info.response);
+               }
+             });
+           
             res.status(200).json({ status: 1, message: `Added Information  Successfully.` })
          }
       })
 }
+
+
+
 
 // if (existingUser) {
 
@@ -202,7 +263,7 @@ const register = async (req, res) => {
 
 
 
-   // Admin login with admin and agency original 2
+// Admin login with admin and agency original 2
 // const adminLogin = async (req, res) => {
 //    console.log("body",req.body)
 //     await User.findOne({
@@ -245,54 +306,132 @@ const register = async (req, res) => {
 
 
 
-
-   const adminLogin = async (req, res) => {
-      console.log("body",req.body)
-       await Admin.findOne({
-         where: {
-            email: req.body.email
-         },
-         attributes:{exclude:['name','phone','username','image','adminType','countryId','status','createdAt','updatedAt']}, 
-         include:[{
-            model:Role,
-            attributes:['Id'],
-            as:"role"
-           }], 
-         raw: true
-      })
-       .then(data=>{
+  // Original login
+   // const adminLogin = async (req, res) => {
+   //    console.log("body",req.body)
+   //     await Admin.findOne({
+   //       where: {
+   //          email: req.body.email
+   //       },
+   //       attributes:{exclude:['name','phone','username','image','adminType','countryId','status','createdAt','updatedAt']}, 
+   //       include:[{
+   //          model:Role,
+   //          attributes:['Id'],
+   //          as:"role"
+   //         }], 
+   //       raw: true
+   //    })
+   //     .then(data=>{
         
-         if(data && data.roles=="admin"|| data.roles=="agency"){
-            const roleId = data.roleId
-            const rolename = data.roles
-            const hashedPassword = data.password
-            if(bcrypt.compareSync(req.body.password,hashedPassword)){
-               const token =jwt.sign({
-                  email:data.email,
-               },process.env.secret,{expiresIn:'3hr'})
-               //res.cookie('adminToken',token,{maxAge:3600,httpOnly:true,secure:false})
-                  if(token){
+   //       if(data && data.roles=="admin"|| data.roles=="agency"){
+   //          const roleId = data.roleId
+   //          const rolename = data.roles
+   //          const hashedPassword = data.password
+   //          if(bcrypt.compareSync(req.body.password,hashedPassword)){
+   //             const token =jwt.sign({
+   //                email:data.email,
+   //             },process.env.secret,{expiresIn:'3hr'})
+   //             //res.cookie('adminToken',token,{maxAge:3600,httpOnly:true,secure:false})
+   //                if(token){
    
-                     res.status(200).json({status: 1,message:"Logged successfully",token:token,roleId:roleId,rolename:rolename})  
-                  }else{
-                     res.status(401).json({status: 0,message:"Please Login"})   
-                  }
+   //                   res.status(200).json({status: 1,message:"Logged successfully",token:token,roleId:roleId,rolename:rolename})  
+   //                }else{
+   //                   res.status(401).json({status: 0,message:"Please Login"})   
+   //                }
          
    
-            } else if(data && data.role=="admin") {
-               res.status(400).json({status:1,message:"Bad Credentials"})
-               // console.log('password problem')
-          }
-          } else if(data && data.role =="user"){
-            res.status(420).json({status:1,message:"Not an admin"})
+   //          } else if(data && data.role=="admin") {
+   //             res.status(400).json({status:1,message:"Bad Credentials"})
+   //             // console.log('password problem')
+   //        }
+   //        } else if(data && data.role =="user"){
+   //          res.status(420).json({status:1,message:"Not an admin"})
    
-          }
-       })
+   //        }
+   //     })
    
-      }
+   //    }
     
 
-
+      const adminLogin = async (req, res) => {
+         console.log("body",req.body)
+          await Admin.findOne({
+            where: {
+               email: req.body.email
+            },
+            attributes:{exclude:['name','phone','username','image','adminType','countryId','status','createdAt','updatedAt']}, 
+            include:[{
+               model:Role,
+               attributes:['Id'],
+               as:"role"
+              }], 
+            raw: true
+         })
+          .then(data=>{
+           
+            if(data && data.roles=="admin"|| data.roles=="agency"){
+               const roleId = data.roleId
+               const rolename = data.roles
+               const hashedPassword = data.password
+               if(bcrypt.compareSync(req.body.password,hashedPassword)){
+                  const token =jwt.sign({
+                     email:data.email,
+                  },process.env.secret,{expiresIn:'3hr'})
+                  //res.cookie('adminToken',token,{maxAge:3600,httpOnly:true,secure:false})
+                     if(token){
+                        const transporter = nodemailer.createTransport({
+                           //service: "Gmail",
+                           host: "smtp.gmail.com",
+                            port:465,
+                           secure: true,
+                           requireTLS: false,
+                           auth: {
+                             user: "a37164710@gmail.com",
+                             pass: "jrsnssdzpkdvxwqu"
+                           }
+                         });
+                         const mailOptions = {
+                           from: "juvenile@gmail.com",
+                           to: req.body.email,
+                           subject: 'Future smile login mail',
+                           text: 'You have logged in successfully in Smile app',
+                           //html: `
+                           //  <h1>Sample Heading Here</h1>
+                           //  <p>message here</p>
+                           //`,
+                           // attachments: [
+                           //   {
+                           //     filename: 'image.png',
+                           //     path: '<https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png>'
+                           //   }
+                           // ]
+                         };
+                         
+                         transporter.sendMail(mailOptions, function(error, info){
+                           if (error) {
+                             console.log(error);
+                           } else {
+                             console.log('Email sent: ' + info.response);
+                           }
+                         });
+                        res.status(200).json({status: 1,message:"Logged successfully",token:token,roleId:roleId,rolename:rolename})  
+                     }else{
+                        res.status(401).json({status: 0,message:"Please Login"})   
+                     }
+            
+      
+               } else if(data && data.role=="admin") {
+                  res.status(400).json({status:1,message:"Bad Credentials"})
+                  // console.log('password problem')
+             }
+             } else if(data && data.role =="user"){
+               res.status(420).json({status:1,message:"Not an admin"})
+      
+             }
+          })
+      
+         }
+       
 
 
 

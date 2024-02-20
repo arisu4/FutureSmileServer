@@ -19,12 +19,13 @@ module.exports = (sequelize,DataTypes) =>{
         roles:{
             type:DataTypes.STRING,
             // values:['admin','subadmin','user'],
-            // defaultValue: "user",
+             defaultValue: "agency",
             allowNull:false
         },
         roleId:{
             type:DataTypes.INTEGER,
             //references:{model:db.user,key:"id"},
+            defaultValue: "0",
             allowNull:false,   
         },
         // role:{
