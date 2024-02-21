@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken')
 const cookie = require('cookie-parser')
 //const { Op } = require('sequelize')
 const nodemailer = require('nodemailer'); 
+const {OtpGenerator} = require('./OtpGenerator');
 
 const User = db.user
 const Admin = db.admin
@@ -379,6 +380,8 @@ const register = async(req, res) => {
                   },process.env.secret,{expiresIn:'3hr'})
                   //res.cookie('adminToken',token,{maxAge:3600,httpOnly:true,secure:false})
                      if(token){
+                        const otp = OtpGenerator();
+                        console.log("generated otp",otp);
                         const transporter = nodemailer.createTransport({
                            //service: "Gmail",
                            host: "smtp.gmail.com",
@@ -386,15 +389,15 @@ const register = async(req, res) => {
                            secure: true,
                            requireTLS: false,
                            auth: {
-                             user: "a37164710@gmail.com",
-                             pass: "jrsnssdzpkdvxwqu"
+                             user: "",
+                             pass: ""
                            }
                          });
                          const mailOptions = {
                            from: "juvenile@gmail.com",
                            to: req.body.email,
                            subject: 'Future smile login mail',
-                           text: 'You have logged in successfully in Smile app',
+                           text: `You are trying to access smile and your otp is:${otp}`,
                            //html: `
                            //  <h1>Sample Heading Here</h1>
                            //  <p>message here</p>
